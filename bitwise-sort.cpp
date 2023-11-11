@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 
-int countDigits(int num)
+int countDigits(unsigned long long num)
 {
     int digitsCount = 0;
 
@@ -14,7 +14,7 @@ int countDigits(int num)
     return digitsCount;
 }
 
-int getDigit(int num, int posFromRight)
+int getDigit(unsigned long long num, int posFromRight)
 {
     for (int i = 0; i < posFromRight; i++)
     {
@@ -24,10 +24,10 @@ int getDigit(int num, int posFromRight)
     return num % 10;
 }
 
-std::vector<int> bitwise(std::vector<int> src)
+std::vector<unsigned long long> bitwise(std::vector<unsigned long long> src)
 {
     std::vector<int> positions;
-    std::vector<std::vector<int>> bucket;
+    std::vector<std::vector<unsigned long long>> bucket;
 
     int digitsCount = countDigits(src[0]);
     int consideredDigit;
@@ -67,18 +67,24 @@ std::vector<int> bitwise(std::vector<int> src)
             }
             else
             {
-                for (int elemInd = 0; elemInd < bucket.at(bucketSlot).size()-1; elemInd++)
+                for (int elemInd = 0; elemInd < bucket.at(bucketSlot).size() - 1; elemInd++)
                 {
                     src.at(changedPosition++) = bucket.at(bucketSlot).at(elemInd);
                     for (int iter = countDigits(bucket.at(bucketSlot).at(elemInd)); iter < digitsCount; iter++)
                     {
-                        std::cout << "0";
+                        if (bucket.at(bucketSlot).at(elemInd) != 0)
+                        {
+                            std::cout << "0";
+                        }
                     }
                     std::cout << bucket.at(bucketSlot).at(elemInd) << ", ";
                 }
                 for (int iter = countDigits(bucket.at(bucketSlot).at(bucket.at(bucketSlot).size() - 1)); iter < digitsCount; iter++)
                 {
-                    std::cout << "0";
+                    if (bucket.at(bucketSlot).at(bucket.at(bucketSlot).size() - 1) != 0)
+                    {
+                        std::cout << "0";
+                    }
                 }
                 std::cout << bucket.at(bucketSlot).at(bucket.at(bucketSlot).size() - 1);
                 src.at(changedPosition++) = bucket.at(bucketSlot).at(bucket.at(bucketSlot).size() - 1);
@@ -98,27 +104,41 @@ int main()
 {
     int n;
     std::cin >> n;
-    std::vector<int> nums;
+    std::vector<unsigned long long> nums;
     nums.resize(n);
 
     for (int i = 0; i < n; i++)
     {
         std::cin >> nums[i];
     }
+    int digitsCount = countDigits(nums[0]);
 
     std::cout << "Initial array:\n";
-    for (int i = 0; i < n-1; i++)
+    for (int i = 0; i < n - 1; i++)
     {
+        for (int iter = countDigits(nums.at(i)); iter < digitsCount; iter++)
+        {
+            if (nums.at(i) != 0)
+            {
+                std::cout << "0";
+            }
+        }
         std::cout << nums[i] << ", ";
     }
-    std::cout << nums[n-1];
+    for (int iter = countDigits(nums.at(n - 1)); iter < digitsCount; iter++)
+    {
+        if (nums.at(n - 1) != 0)
+        {
+            std::cout << "0";
+        }
+    }
+    std::cout << nums[n - 1];
     std::cout << "\n**********" << std::endl;
 
 
 
 
-    std::vector<int> sorted = bitwise(nums);
-    int digitsCount = countDigits(nums[0]);
+    std::vector<unsigned long long> sorted = bitwise(nums);
 
     std::cout << "Sorted array:" << std::endl;
 
@@ -126,9 +146,19 @@ int main()
     {
         for (int iter = countDigits(sorted.at(i)); iter < digitsCount; iter++)
         {
-            std::cout << "0";
+            if (sorted.at(i) != 0)
+            {
+                std::cout << "0";
+            }
         }
         std::cout << sorted.at(i) << ", ";
+    }
+    for (int iter = countDigits(sorted.at(sorted.size() - 1)); iter < digitsCount; iter++)
+    {
+        if (sorted.at(sorted.size() - 1) != 0)
+        {
+            std::cout << "0";
+        }
     }
     std::cout << sorted.at(sorted.size() - 1);
 }
